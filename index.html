@@ -17,48 +17,67 @@
 
         .game-board {
             display: grid;
-            grid-template-columns: repeat(3, 150px);
-            gap: 10px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5vw;
+            width: 90vw;
+            max-width: 600px;
         }
 
         .hole {
-            width: 150px;
-            height: 150px;
+            width: 30vw;
+            height: 30vw;
             background-color: #ddd;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 24px;
+            font-size: 5vw;
             cursor: pointer;
             position: relative;
         }
 
         .mole {
-            width: 100px;
-            height: 100px;
+            width: 20vw;
+            height: 20vw;
             background-color: brown;
             border-radius: 50%;
             position: absolute;
         }
 
-        .hidden {
-            display: none;
-        }
-
         #score {
             margin-bottom: 20px;
-            font-size: 24px;
+            font-size: 5vw;
         }
 
         .title {
             display: flex;
             justify-content: center;
+            font-size: 6vw;
+        }
+
+        /* PC 화면에 최적화 */
+        @media (min-width: 768px) {
+            .hole {
+                width: 9vw;
+                height: 9vw;
+            }
+
+            .mole {
+                width: 6vw;
+                height: 6vw;
+            }
+
+            #score {
+                font-size: 1.2vw;
+            }
+
+            .title {
+                font-size: 1.5vw;
+            }
         }
     </style>
 </head>
 <body>
-    <h1 class="title">두더지 게임!</h1>
     <h3 class="title">끊임없이 나오는 두더지를 클릭해 점수를 얻어보세요!</h3>
 
     <div>
@@ -84,12 +103,10 @@
 
         function startGame() {
             timer = setInterval(() => {
-                // 두더지 숨기기
                 if (moleIndex !== -1) {
                     holes[moleIndex].innerHTML = '';
                 }
 
-                // 새로운 두더지 보여주기
                 moleIndex = Math.floor(Math.random() * 9);
                 const moleDiv = document.createElement('div');
                 moleDiv.classList.add('mole');
@@ -98,17 +115,19 @@
         }
 
         function hitMole(event) {
-            const clickedHoleIndex = Number(event.currentTarget.dataset.index); // 클릭한 구멍의 인덱스를 숫자로 변환
-            if (clickedHoleIndex === moleIndex) { // 두더지가 있는 구멍과 클릭한 구멍이 같은지 확인
+            const clickedHoleIndex = Number(event.currentTarget.dataset.index);
+            if (clickedHoleIndex === moleIndex) {
                 score++;
                 document.getElementById('score').textContent = `점수: ${score}`;
-                holes[moleIndex].innerHTML = ''; // 맞춘 후 두더지 숨기기
+                holes[moleIndex].innerHTML = '';
                 moleIndex = -1;
             }
         }
 
-        holes.forEach(hole => hole.addEventListener('click', hitMole));
-
+        holes.forEach(hole => {
+            hole.addEventListener('click', hitMole);
+            hole.addEventListener('touchstart', hitMole);
+        });
 
         startGame();
     </script>
