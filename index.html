@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>두더지 게임</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            flex-direction: column;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 150px);
+            gap: 10px;
+        }
+
+        .hole {
+            width: 150px;
+            height: 150px;
+            background-color: #ddd;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .mole {
+            width: 100px;
+            height: 100px;
+            background-color: brown;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #score {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .title {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="title">두더지 게임!</h1>
+    <h3 class="title">끊임없이 나오는 두더지를 클릭해 점수를 얻어보세요!</h3>
+
+    <div>
+        <div id="score">점수: 0</div>
+        <div class="game-board">
+            <div class="hole" data-index="0"></div>
+            <div class="hole" data-index="1"></div>
+            <div class="hole" data-index="2"></div>
+            <div class="hole" data-index="3"></div>
+            <div class="hole" data-index="4"></div>
+            <div class="hole" data-index="5"></div>
+            <div class="hole" data-index="6"></div>
+            <div class="hole" data-index="7"></div>
+            <div class="hole" data-index="8"></div>
+        </div>
+    </div>
+
+    <script>
+        const holes = document.querySelectorAll('.hole');
+        let score = 0;
+        let moleIndex = -1;
+        let timer;
+
+        function startGame() {
+            timer = setInterval(() => {
+                // 두더지 숨기기
+                if (moleIndex !== -1) {
+                    holes[moleIndex].innerHTML = '';
+                }
+
+                // 새로운 두더지 보여주기
+                moleIndex = Math.floor(Math.random() * 9);
+                const moleDiv = document.createElement('div');
+                moleDiv.classList.add('mole');
+                holes[moleIndex].appendChild(moleDiv);
+            }, 1000);
+        }
+
+        function hitMole(event) {
+            const clickedHoleIndex = Number(event.currentTarget.dataset.index); // 클릭한 구멍의 인덱스를 숫자로 변환
+            if (clickedHoleIndex === moleIndex) { // 두더지가 있는 구멍과 클릭한 구멍이 같은지 확인
+                score++;
+                document.getElementById('score').textContent = `점수: ${score}`;
+                holes[moleIndex].innerHTML = ''; // 맞춘 후 두더지 숨기기
+                moleIndex = -1;
+            }
+        }
+
+        holes.forEach(hole => hole.addEventListener('click', hitMole));
+
+
+        startGame();
+    </script>
+
+</body>
+</html>
