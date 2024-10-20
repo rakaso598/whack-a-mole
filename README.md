@@ -1,4 +1,4 @@
 # whack-a-mole
 whack-a-mole game on GitHub pages
 
-PC / Mobile 동시 지원
+[두더지 게임] PC / Mobile 동시 지원
